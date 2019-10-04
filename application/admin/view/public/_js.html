@@ -1,0 +1,494 @@
+<script src="/static/admin/js/skins.min.js"></script>
+<!--Basic Scripts-->
+<script src="/static/admin/js/jquery.min.js"></script>
+<script src="/static/admin/js/bootstrap.min.js"></script>
+<script src="/static/admin/js/slimscroll/jquery.slimscroll.min.js"></script>
+<!--Beyond Scripts-->
+<script src="/static/admin/js/beyond.js"></script>
+<script src="/static/admin/lib/layer/layer.js"></script>
+<script src="/static/admin/lib/ueditor/ueditor.config.js"></script>
+<script src="/static/admin/lib/ueditor/ueditor.all.js"></script>
+<script>
+    $(window).bind("load", function () {
+        /*Sets Themed Colors Based on Themes*/
+        themeprimary = getThemeColorFromCss('themeprimary');
+        themesecondary = getThemeColorFromCss('themesecondary');
+        themethirdcolor = getThemeColorFromCss('themethirdcolor');
+        themefourthcolor = getThemeColorFromCss('themefourthcolor');
+        themefifthcolor = getThemeColorFromCss('themefifthcolor');
+
+    });
+    $(function () {
+        // 退出登录
+        $('#logout').click(function () {
+            $.ajax({
+                url: "{:url('admin/home/logout')}",
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            icon: 6,
+                            time: 2000
+                        }, function () {
+                            location.href = data.url;
+                        })
+                    } else {
+                        layer.open({
+                            title: '系统繁忙',
+                            content: data.msg,
+                            icon: 5,
+                            anim: 6,
+                        })
+                    }
+                }
+            });
+            return false;
+        })
+        // 栏目添加
+        $('#sortAdd').click(function () {
+            $.ajax({
+                url: "{:url('admin/cate/add')}",
+                data: $('form').serialize(),
+                type: "POST",
+                dataType: "JSON",
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            icon: 6,
+                            time: 1500,
+                        }, function () {
+                            location.href = data.url;
+                        })
+                    } else {
+                        layer.open({
+                            title: '添加失败',
+                            content: data.msg,
+                            icon: 5,
+                            anim: 6
+                        })
+                    }
+                }
+            })
+            return false;
+        });
+        // 栏目排序
+        $('input[id=sort2]').change(function () {
+            // 栏目sort排序
+            var id = $(this).attr('dataid');
+            var sort = $(this).val();
+            $.ajax({
+                url: "{:url('admin/cate/sort')}",
+                type: "POST",
+                data: {id: id, sort: sort},
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            icon: 6,
+                            msg: data.msg
+                        }, function () {
+                            location.href = data.url;
+                        })
+                    } else {
+                        layer.open({
+                            title: '排序失败',
+                            content: data.msg,
+                            icon: 5,
+                            anim: 6
+                        })
+                    }
+                }
+
+            });
+            return false;
+        })
+        // 栏目修改
+        $('#cateEdit').click(function () {
+            $.ajax({
+                url: "{:url('admin/cate/edit')}",
+                type: 'POST',
+                data: $('form').serialize(),
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            icon: 6,
+                            time: 2000
+                        }, function () {
+                            location.href = data.url;
+                        })
+                    } else {
+                        layer.open({
+                            title: '修改失败',
+                            content: data.msg,
+                            icon: 5,
+                            anim: 6
+                        })
+                    }
+                }
+            });
+            return false;
+        })
+        // 栏目删除
+        $('.del').click(function () {
+            var id = $(this).attr('id');
+            layer.confirm('确定要删除吗？', {
+                title: '栏目删除',
+                icon: 3,
+            }, function (index) {
+                layer.close(index);
+                $.ajax({
+                    url: "{:url('admin/cate/del')}",
+                    type: 'post',
+                    data: {id: id},
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res.code == 1) {
+                            layer.msg(res.msg, {
+                                icon: 6,
+                                time: 1500
+                            }, function () {
+                                location.href = res.url;
+                            })
+                        } else {
+                            layer.open({
+                                title: '删除失败',
+                                content: res.msg,
+                                icon: 5,
+                                anim: 6
+                            })
+                        }
+                    }
+                });
+            });
+            return false;
+        })
+
+
+        // 文章添加
+        $('#artadd').click(function () {
+            $.ajax({
+                url: "{:url('admin/articles/add')}",
+                type: 'POST',
+                data: $('form').serialize(),
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            icon: 6,
+                            time: 2000,
+                        }, function () {
+                            location.href = data.url;
+                        })
+                    } else {
+                        layer.open({
+                            title: '添加失败',
+                            content: data.msg,
+                            icon: 5,
+                            anim: 6
+                        })
+                    }
+                }
+            });
+
+            return false;
+        })
+        // 是否推荐修改
+        $('.arttop').click(function () {
+            var id = $(this).attr('id');
+            var is_top = $(this).attr('istop');
+            $.ajax({
+                url: "{:url('admin/articles/top')}",
+                data: {id: id, is_top: is_top},
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            icon: 6,
+                        }, function () {
+                            location.href = data.url;
+                        })
+                    } else {
+                        layer.open({
+                            content: data.msg,
+                            icon: 5,
+                            anim: 6
+                        })
+                    }
+                }
+            });
+            return false;
+        });
+        // 文章修改
+        $('#artedit').click(function () {
+            $.ajax({
+                url: "{:url('admin/articles/edit')}",
+                type: 'POST',
+                data: $('form').serialize(),
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            icon: 6,
+                            time: 1000
+                        }, function () {
+                            location.href = data.url;
+                        })
+                    } else {
+                        layer.open({
+                            title: '修改失败',
+                            content: data.msg,
+                            icon: 5,
+                            anim: 6
+                        })
+                    }
+                }
+            });
+            return false;
+        });
+        // 文章删除
+        $('.artDel').click(function () {
+            var id = $(this).attr('delid');
+            $.ajax({
+                url: "{:url('admin/articles/del')}",
+                type: 'POST',
+                data: {id: id},
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            icon: 6,
+                        }, function () {
+                            location.href = data.url;
+                        })
+                    } else {
+                        layer.open({
+                            title: '删除成功',
+                            content: data.msg,
+                            icon: 5,
+                            anim: 6
+                        })
+                    }
+                }
+            });
+            return false;
+        });
+
+        // 管理员
+        // 添加
+        $('#memadd').click(function () {
+            $.ajax({
+                url: "{:url('admin/member/add')}",
+                data: $('form').serialize(),
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            icon: 6,
+                            anim: 5
+                        }, function () {
+                            location.href = data.url;
+                        })
+                    } else {
+                        layer.open({
+                            title: '添加失败',
+                            content: data.msg,
+                            icon: 5,
+                            anim: 6
+                        })
+
+                    }
+                }
+            });
+            return false;
+        });
+        // 修改
+        $('#memedit').click(function () {
+            $.ajax({
+                url: "{:url('admin/member/edit')}",
+                data: $('form').serialize(),
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            icon: 6,
+                            anim: 5,
+                        }, function () {
+                            location.href = data.url;
+                        })
+                    } else {
+                        layer.open({
+                            title: '修改失败',
+                            content: data.msg,
+                            icon: 5,
+                            anim: 6,
+                        })
+                    }
+                }
+            });
+            return false;
+        });
+        // 删除
+        $('.memDel').click(function () {
+            var id = $(this).attr('delid');
+            $.ajax({
+                url: "{:url('admin/member/del')}",
+                data: {id: id},
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            icon: 6,
+                            anim: 5,
+                        }, function () {
+                            location.href = data.url;
+                        })
+                    } else {
+                        layer.open({
+                            title: '修改失败',
+                            content: data.msg,
+                            icon: 5,
+                            anim: 6,
+                        })
+                    }
+                }
+            });
+            return false;
+        });
+
+        // admin
+        $('#adminAdd').click(function () {
+            $.ajax({
+                url: "{:url('admin/admin/add')}",
+                data: $('form').serialize(),
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            icon: 6,
+                            anim: 5
+                        }, function () {
+                            location.href = data.url;
+                        })
+                    } else {
+                        layer.open({
+                            title: '添加失败',
+                            content: data.msg,
+                            icon: 5,
+                            anim: 6
+                        })
+
+                    }
+                }
+            });
+            return false;
+        });
+        // 管理员状态
+        $('.status').click(function () {
+            alert('根据文章是否推荐做出');
+            return false;
+        });
+        $('.adminEdit').click(function () {
+            alert('根据文章编辑删除来做');
+            return false;
+        });
+
+        // 删除评论
+        $('.Del').click(function(){
+            var id = $(this).attr('delid');
+            $.ajax({
+               url:"{:url('admin/comment/del')}",
+               data:{id:id},
+               type:'POST',
+               dataType:'JSON',
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            icon: 6,
+                            anim: 5
+                        }, function () {
+                            location.href = data.url;
+                        })
+                    } else {
+                        layer.open({
+                            title: '添加失败',
+                            content: data.msg,
+                            icon: 5,
+                            anim: 6
+                        })
+
+                    }
+                }
+            });
+
+            return false;
+        });
+        // 系统设置添加
+        $('#systemAdd').click(function(){
+            $.ajax({
+                url: "{:url('admin/system/add')}",
+                data: $('form').serialize(),
+                type:'POST',
+                dataType:'JSON',
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            icon: 6,
+                            anim: 5
+                        }, function () {
+                            location.href = data.url;
+                        })
+                    } else {
+                        layer.open({
+                            title: '添加失败',
+                            content: data.msg,
+                            icon: 5,
+                            anim: 6
+                        })
+
+                    }
+                }
+            });
+            return false;
+        });
+        // 系统删除
+        $('.Del').click(function(){
+            alert('系统设置模块不完整！！');
+            var id = $(this).attr('delid');
+            $.ajax({
+                url : "{:url('admin/system/del')}",
+                data:{id:id},
+                type:'POST',
+                dataType:'JSON',
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            icon: 6,
+                            anim: 5
+                        }, function () {
+                            location.href = data.url;
+                        })
+                    } else {
+                        layer.open({
+                            title: '删除失败',
+                            content: data.msg,
+                            icon: 5,
+                            anim: 6
+                        })
+
+                    }
+                }
+            });
+            return false;
+        });
+
+        // 引入文本编辑器
+        UE.getEditor('content');
+    })
+</script>

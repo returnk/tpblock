@@ -1,0 +1,102 @@
+{extend name="public/base"}
+{block name="title"}
+{$artInfo.title}--{$webInfo.webname}
+{/block}
+{block name="content"}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-8">
+            <h1 class="article-title"></h1>
+            <div class="status">{$artInfo.pv}阅读-{$artInfo.comm_num}评论-作者：{$artInfo.author}
+              {volist name="artInfo.tags|strToArray" id="vo"} <!--  strToArray看公共函数-->
+                <span class="label label-default">{$vo}</span>
+                {/volist}
+            </div>
+            <div class="article-content">
+                <blockquote>
+                    {$artInfo.desc}
+                </blockquote>
+                {$artInfo.content|raw}
+            </div>
+            <div class="article-comment">
+                <div class="page-header"><b>相关评论</b></div>
+                <div class="comment-content">
+                    <form action="{:url('index/index/comm')}">
+                        <div class="form-group">
+                            <input type="hidden" name="article_id" value="{$artInfo.id}">
+                            <input type="hidden" name="member_id" value="{:session('index.id')}">
+                            <textarea class="form-control" id="comment" name="content" rows="5" cols=""></textarea>
+                        </div>
+                        <div class="form-group pull-right">
+                            <button type="submit" class="btn btn-primary" id="content">评论（请认真评论）</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="clearfix"></div>
+                <div class="comment-list">
+                    {volist name="artInfo.comment" id="vo"}
+                    <div class="comment-list-item">
+                        <div class="info">{$vo.member.username}<small>{$vo.create_time}</small></div>
+                        <div class="content">{$vo.content}</div>
+                    </div>
+                    {/volist}
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <div class="affix">
+                <div class="page-header h3">推荐文章</div>
+                <div class="topic-list">
+                    {foreach $topArt as $val}
+                    <div class="topic-list-item">
+                        <a href="{:url('index/article/info',['id'=>$val.id])}" class="title">{$val.title}</a>
+                    </div>
+                    {/foreach}
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js" /}
+<script>
+    $(function () {
+        $('#content').click(function(){
+            if("{:session('index.id')}") {
+                $.ajax({
+                    url:"{:url('index/index/content')}",
+                    data:$('form').serialize(),
+                    type:'POST',
+                    dataType:'JSON',
+                    success:function(data) {
+                        if(data.code == 1) {
+                            layer.msg(data.msg,{
+                                icon:6,
+                                time:2000
+                            },function(){
+                                location.href = data.url;
+                            })
+                        }else {
+                            layer.open({
+                                title:'评论失败',
+                                content:data.msg,
+                                icon:5,
+                                anim:6
+                            })
+                        }
+                    }
+                });
+            }else {
+                layer.msg('请先登录',{
+                    icon:5,
+                    anim:6
+                },function(){
+                    location.href = "{:url('index/index/login')}";
+                });
+            }
+            return false;
+        })
+    });
+</script>
+{/block}

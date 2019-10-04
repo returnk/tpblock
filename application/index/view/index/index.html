@@ -1,0 +1,38 @@
+{extend name="public/base" }
+
+{block name="content" /}
+<div class="row">
+    <div class="col-sm-12 col-md-8">
+        <div class="page-header h3">文章列表</div>
+        <div class="article-list">
+            {foreach $artData as $val}
+            <div class="article-list-item">
+                <a href="{:url('index/article/info',['id'=>$val.id])}" class="title">{$val.title}</a>
+                <div class="info">
+                    <span class="author">作者：{$val.author}</span>-
+                    <span class="time">发布时间：{$val.create_time}</span>-
+                    <span class="read">阅读：1000</span>-
+                    <span class="comment">评论：1K</span>
+                </div>
+            </div>
+            {/foreach}
+        </div>
+        <nav class="">
+            <ul class="pagination">
+                {$artData|raw}
+            </ul>
+        </nav>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <div class="page-header h3">推荐文章</div>
+        <div class="topic-list">
+            {foreach $topArt as $val}
+            <div class="topic-list-item">
+                <a href="{:url('index/article/info',['id'=>$val.id])}" class="title">{$val.title}</a>
+            </div>
+            {/foreach}
+
+        </div>
+    </div>
+</div>
+{/block}

@@ -1,0 +1,40 @@
+{extend name="layout" /}
+{block name="right" }
+<div class="page-body">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="widget radius-bordered">
+                <div class="widget-header bordered-bottom bordered-themeprimary">
+                    <span class="widget-caption">栏目添加</span>
+                </div>
+                <div class="widget-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="catename" class="col-sm-2 control-label no-padding-right">栏目名称</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" name="catename" id="catename" placeholder="栏目名称" />
+                                <p class="help-block">请输入栏目名称</p>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="sort" class="col-sm-2 control-label no-padding-right">排序</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" name="sort" placeholder="排序" />
+                                <p class="help-block">数字越大排序越后</p>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" id="sortAdd" class="btn btn-primary">添加</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

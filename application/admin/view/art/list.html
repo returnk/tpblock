@@ -1,0 +1,49 @@
+{extend name="layout" /}
+{block name="right"}
+<!-- Page Body -->
+<div class="page-body">
+    <a href="{:url('admin/articles/add')}" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i>&nbsp;添加文章</a>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="widget">
+                <div class="widget-header">
+                    <span class="widget-caption">添加文章</span>
+                    <div class="widget-buttons">
+                        {$data|raw}
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>标签</th>
+                            <th>文章标题</th>
+                            <th>文章概要</th>
+                            <th>所属导航</th>
+                            <th>是否推荐</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        {foreach $data as $val}
+                        <tr>
+                            <td>{$val.id}</td>
+                            <td>{$val.tags}</td>
+                            <td>{$val.title}</td>
+                            <td>{$val.desc}</td>
+                            <td>{$val.cate.catename}</td>
+                            <td style="cursor: pointer" id="{$val.id}" istop="{$val.is_top}" class="arttop">{if $val.is_top == 1}<span class="btn-success">是</span>{else /}<span class="btn-darkorange">否</span>{/if}</td>
+                            <td>
+                                <a href="{:url('admin/articles/edit',['id'=>$val.id])}" class="btn btn-sm btn-warning">编辑</a>
+                                <a href="#" class="btn btn-sm btn-danger artDel" delid="{$val.id}">删除</a>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Page Body -->
+{/block}

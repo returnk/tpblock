@@ -1,0 +1,46 @@
+{extend name="layout" /}
+{block name="right"}
+<!-- Page Body -->
+<div class="page-body">
+    <a href="{:url('admin/admin/add')}" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i>&nbsp;添加会员</a>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="widget">
+                <div class="widget-header">
+                    <span class="widget-caption">添加会员</span>
+                    <div class="widget-buttons">
+                        {$data|raw}
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>评论用户</th>
+                            <th>评论文章</th>
+                            <th>评论内容</th>
+                            <th>更新时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        {foreach $data as $val}
+                        <tr>
+                            <td>{$val.id}</td>
+                            <td>{$val.member.username}</td>
+                            <td>{$val.article.title}</td>
+                            <td>{$val.content}</td>
+                            <td>{$val.create_time}</td>
+                            <td>
+                                <a href="#" class="btn btn-sm btn-danger Del" delid="{$val.id}">删除</a>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Page Body -->
+{/block}

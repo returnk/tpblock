@@ -1,0 +1,45 @@
+{extend name="layout" /}
+{block name="right"}
+<!-- Page Body -->
+<div class="page-body">
+    <a href="{:url('admin/member/add')}" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i>&nbsp;添加会员</a>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="widget">
+                <div class="widget-header">
+                    <span class="widget-caption">添加会员</span>
+                    <div class="widget-buttons">
+                        {$data|raw}
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>用户名</th>
+                            <th>密码</th>
+                            <th>邮箱</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        {foreach $data as $val}
+                        <tr>
+                            <td>{$val.id}</td>
+                            <td>{$val.username}</td>
+                            <td>{$val.password}</td>
+                            <td>{$val.email}</td>
+                            <td>
+                                <a href="{:url('admin/member/edit',['id'=>$val.id])}" class="btn btn-sm btn-warning">编辑</a>
+                                <a href="#" class="btn btn-sm btn-danger memDel" delid="{$val.id}">删除</a>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Page Body -->
+{/block}

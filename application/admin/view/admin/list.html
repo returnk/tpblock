@@ -1,0 +1,61 @@
+{extend name="layout" /}
+{block name="right"}
+<!-- Page Body -->
+<div class="page-body">
+    <a href="{:url('admin/admin/add')}" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i>&nbsp;添加会员</a>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="widget">
+                <div class="widget-header">
+                    <span class="widget-caption">添加会员</span>
+                    <div class="widget-buttons">
+                        {$data|raw}
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>用户名</th>
+                            <th>昵称</th>
+                            <th>邮箱</th>
+                            <th>是否超级管理员</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        {foreach $data as $val}
+                        <tr>
+                            <td>{$val.id}</td>
+                            <td>{$val.username}</td>
+                            <td>{$val.nickname}</td>
+                            <td>{$val.email}</td>
+                            <td style="cursor: pointer">{if $val.is_super == 1}<span class="btn-success">超级管理员</span>{else
+                                /}普通管理员{/if}
+                            </td>
+                            <td>{if $val.status == 1}启用{else /}禁用{/if}</td>
+                            <td>
+                                {if $val.is_super != 1}
+                                {if session('admin.is_super') == 1}
+                                {if $val.status == 1}
+                                <a href="#" class="btn btn-sm btn-active status" id="{$val.id}" status="{$val.status}">禁用</a>
+                                {else /}
+                                <a href="#" class="btn btn-sm btn-active status" id="{$val.id}" status="{$val.status}">启用</a>
+                                {/if}
+                                {/if}
+                                {/if}
+                                <a href="{:url('admin/member/edit',['id'=>$val.id])}"
+                                   class="btn btn-sm btn-warning adminEdit">编辑</a>
+                                <a href="#" class="btn btn-sm btn-danger memDel adminEdit" delid="{$val.id}">删除</a>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Page Body -->
+{/block}

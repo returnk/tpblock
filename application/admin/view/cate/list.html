@@ -1,0 +1,42 @@
+{extend name="layout" }
+{block name="right"}
+<!-- Page Body -->
+<div class="page-body">
+    <a href="{:url('admin/cate/add')}" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i>&nbsp;添加栏目</a>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="widget">
+                <div class="widget-header">
+                    <span class="widget-caption">添加文章</span>
+                    {$data|raw}
+                </div>
+                <div class="widget-body">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                        <tr>
+                            <th>排序</th>
+                            <th>所属栏目</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        {foreach $data as $val}
+                        <tr>
+                            <td>
+                                <input type="text" name="sort" id="sort2" size="1" dataid="{$val.id}" value="{$val.sort}">
+                            </td>
+                            <td>{$val.catename}</td>
+                            <td>
+                                <a href="{:url('admin/cate/edit',['id'=>$val.id])}"
+                                   class="btn btn-sm btn-warning">编辑</a>
+                                <a href="#" class="btn btn-sm btn-danger del" id="{$val.id}">删除</a>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Page Body -->
+{/block}
